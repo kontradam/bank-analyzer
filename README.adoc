@@ -1,528 +1,119 @@
 = Bank CSV Analyzer
-Adam Juśko <https://github.com/kontradam>
-v1.0.0, 2026-01-21
-:toc: left
-:toclevels: 3
-:icons: font
-:source-highlighter: rouge
-:sectnums:
 
-[abstract]
-== Abstrakt
+Aplikacja konsolowa i graficzna (JavaFX) do analizy wyciągów bankowych w formacie CSV z automatyczną kategoryzacją transakcji i generowaniem raportów statystycznych.
 
-Aplikacja konsolowa do analizy wyciągów bankowych w formacie CSV z automatyczną kategoryzacją transakcji i generowaniem raportów statystycznych.
+Powstała z osobistej potrzeby do kontrolowania finansów na różnych kontach bankowych.
 
-[.lead]
 *Projekt na zaliczenie:* Laboratorium Specjalistyczne 2 +
-*Autor:* (kontradam) +
+*Autor:* kontradam +
 *Rok akademicki:* 2025/2026
 
-'''
+---
 
 == Problem biznesowy
 
-Ręczna analiza wyciągów bankowych jest czasochłonna i podatna na błędy. Aplikacja automatyzuje proces kategoryzacji wydatków i generowania raportów finansowych, umożliwiając szybką analizę nawyków wydatkowych.
+Ręczna analiza wyciągów bankowych jest czasochłonna i podatna na błędy. Aplikacja automatyzuje proces segregowania wydatków i generowania raportów finansowych, umożliwiając szybką analizę nawyków wydatkowych.
 
-[.lead]
-*Rozwiązanie:* Automatyczna kategoryzacja transakcji na podstawie słów kluczowych w tytułach płatności oraz nazw kontrahentów.
+Automatyczna kategoryzacja transakcji na podstawie słów kluczowych w tytułach płatności oraz nazw kontrahentów.
+
+Do aplikacji dołączone dwa pliki CSV z fake'owymi danymi do testowania.
 
 == Funkcjonalności
 
-[cols="1,3", options="header"]
-|===
-|Funkcja
-|Opis
-
-|Multi-file processing
-|Jednoczesne wczytywanie wielu plików CSV
-
-|Automatyczna kategoryzacja
-|Inteligentne przypisywanie transakcji do 10 kategorii
-
-|Analiza wydatków
-|Sumy i rankingi według kategorii
-
-|Zestawienie miesięczne
-|Przychody, wydatki i bilans dla każdego miesiąca
-
-|TOP 10 wydatków
-|Ranking najdroższych transakcji
-
-|Export raportu
-|Zapis pełnej analizy do pliku TXT
-|===
-
-=== Kategorie transakcji
-
-Aplikacja automatycznie kategoryzuje transakcje do następujących kategorii:
-
-. *Jedzenie* - restauracje, fast-food, sklepy spożywcze (McDonald's, Żabka, Stokrotka)
-. *Transport* - paliwo, parking, Bolt, MPK, ORLEN
-. *Rachunki* - prąd (PGE), gaz (PGNiG), woda (MPWiK), internet (Netia, Orange)
-. *Rozrywka* - kino (Cinema City), streaming (Netflix, Spotify)
-. *Zdrowie* - apteki, przychodnie, szpitale
-. *Zakupy* - Allegro, Amazon, sklepy odzieżowe
-. *Wynagrodzenie* - pensja, dodatki, godziny nadliczbowe
-. *Przelewy* - ogólne przelewy wychodzące
-. *Inne przychody* - pozostałe wpływy
-. *Inne* - transakcje nieprzypisane do kategorii
+* Multi-file processing - jednoczesne wczytywanie wielu plików CSV
+* Automatyczna kategoryzacja - inteligentne przypisywanie transakcji do 10 kategorii
+* Analiza wydatków - sumy i rankingi według kategorii
+* Zestawienie miesięczne - przychody, wydatki i bilans dla każdego miesiąca
+* TOP 10 wydatków - ranking najdroższych transakcji
+* Export raportu - zapis pełnej analizy do pliku TXT
+* Interfejs graficzny - wykresy wydatków i tabela transakcji (JavaFX)
 
 == Technologie
 
-[cols="1,2,2", options="header"]
-|===
-|Technologia
-|Wersja
-|Zastosowanie
-
-|Java
-|17
-|Język programowania
-
-|Gradle
-|8.5
-|System budowania projektu
-
-|OpenCSV
-|5.9
-|Parsowanie plików CSV
-
-|JUnit
-|5.10.1
-|Testy jednostkowe
-|===
+* Java 17
+* Gradle 8.5
+* OpenCSV 5.9 - parsowanie plików CSV
+* JUnit 5.10.1 - testy jednostkowe
+* JavaFX 21 - interfejs graficzny
 
 == Struktura projektu
 
-[source,text]
 ----
 bank-analyzer/
-├── build.gradle                    # Konfiguracja Gradle
-├── README.adoc                     # Dokumentacja (AsciiDoc)
-├── gradlew.bat                     # Gradle Wrapper (Windows)
-├── gradle/
-│   └── wrapper/
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-└── src/
-    ├── main/
-    │   ├── java/com/bank/
-    │   │   ├── BankAnalyzerApp.java           # Główna klasa aplikacji
-    │   │   ├── model/
-    │   │   │   ├── Transaction.java           # Model transakcji
-    │   │   │   └── Category.java              # Enum kategorii
-    │   │   └── service/
-    │   │       ├── CsvParserService.java      # Parser plików CSV
-    │   │       ├── CategorizationService.java # Logika kategoryzacji
-    │   │       └── ReportService.java         # Generator raportów
-    │   └── resources/
-    └── test/
-        └── java/com/bank/
-            └── CategorizationServiceTest.java # Testy jednostkowe
+├── build.gradle
+├── README.adoc
+├── gradlew.bat
+├── src/
+│   ├── main/java/com/bank/
+│   │   ├── BankAnalyzerApp.java
+│   │   ├── gui/
+│   │   │   └── BankAnalyzerGUI.java
+│   │   ├── model/
+│   │   │   ├── Transaction.java
+│   │   │   └── Category.java
+│   │   └── service/
+│   │       ├── CsvParserService.java
+│   │       ├── CategorizationService.java
+│   │       └── ReportService.java
+│   └── test/java/com/bank/
+│       └── CategorizationServiceTest.java
 ----
-
-=== Opis klas
-
-==== `BankAnalyzerApp`
-[horizontal]
-Plik:: `src/main/java/com/bank/BankAnalyzerApp.java`
-Typ:: Klasa główna (main)
-Odpowiedzialność:: Punkt wejścia aplikacji, orkiestracja serwisów
-
-==== `Transaction`
-[horizontal]
-Plik:: `src/main/java/com/bank/model/Transaction.java`
-Typ:: Model danych (POJO)
-Pola:: `bookingDate`, `operationDate`, `operationType`, `amount`, `currency`, `counterparty`, `title`, `balanceAfter`, `category`
-
-==== `Category`
-[horizontal]
-Plik:: `src/main/java/com/bank/model/Category.java`
-Typ:: Enum
-Wartości:: `JEDZENIE`, `TRANSPORT`, `RACHUNKI`, `ROZRYWKA`, `ZAKUPY`, `ZDROWIE`, `WYNAGRODZENIE`, `INNE_PRZYCHODY`, `PRZELEWY`, `INNE`
-
-==== `CsvParserService`
-[horizontal]
-Plik:: `src/main/java/com/bank/service/CsvParserService.java`
-Odpowiedzialność:: Parsowanie plików CSV, konwersja wierszy na obiekty `Transaction`
-Metody::
-* `parseFile(String filePath)` - parsuje pojedynczy plik
-* `parseMultipleFiles(List<String> filePaths)` - parsuje wiele plików
-
-==== `CategorizationService`
-[horizontal]
-Plik:: `src/main/java/com/bank/service/CategorizationService.java`
-Odpowiedzialność:: Automatyczna kategoryzacja transakcji na podstawie słów kluczowych
-Algorytm:: Pattern matching na tytułach transakcji i nazwach kontrahentów
-
-==== `ReportService`
-[horizontal]
-Plik:: `src/main/java/com/bank/service/ReportService.java`
-Odpowiedzialność:: Generowanie raportów w formacie TXT oraz wyświetlanie podsumowania w konsoli
-Metody::
-* `generateReport(List<Transaction>, String outputPath)` - eksport do pliku
-* `printSummaryToConsole(List<Transaction>)` - wyświetlenie w konsoli
 
 == Instalacja i uruchomienie
 
-=== Wymagania systemowe
+=== Wymagania
 
-[IMPORTANT]
-====
-Wymagana jest *Java 17 lub nowsza* (JDK, nie JRE).
+Java 17 lub nowsza (JDK, nie JRE)
 
-Sprawdzenie wersji Java:
-[source,bash]
+Sprawdzenie wersji:
 ----
 java -version
 ----
-====
 
-System operacyjny: Windows, Linux lub macOS
+=== Instalacja
 
-=== Instrukcja instalacji
-
-==== Krok 1: Klonowanie repozytorium
-
-[source,bash]
+Sklonuj repozytorium:
 ----
 git clone https://github.com/kontradam/bank-analyzer.git
 cd bank-analyzer
 ----
 
-==== Krok 2: Budowanie projektu
-
-.Windows
-[source,cmd]
+Zbuduj projekt:
 ----
 gradlew.bat build
 ----
 
-.Linux/macOS
-[source,bash]
+=== Uruchomienie
+
+Interfejs graficzny (GUI):
 ----
-./gradlew build
-----
-
-[NOTE]
-====
-Gradle automatycznie:
-
-* Pobierze wymagane zależności (OpenCSV, JUnit)
-* Skompiluje kod źródłowy
-* Uruchomi testy jednostkowe
-* Utworzy plik JAR w `build/libs/`
-====
-
-==== Krok 3: Uruchomienie aplikacji
-
-[source,bash]
-----
-java -jar build/libs/bank-analyzer-1.0.0.jar <ścieżka_do_pliku_csv> [plik2.csv] [...]
+gradlew.bat run
 ----
 
-.Przykład z jednym plikiem
-[source,bash]
+Aplikacja konsolowa:
 ----
-java -jar build/libs/bank-analyzer-1.0.0.jar lista_operacji_202601.csv
-----
-
-.Przykład z wieloma plikami
-[source,bash]
-----
-java -jar build/libs/bank-analyzer-1.0.0.jar styczen.csv luty.csv marzec.csv
+java -jar build/libs/bank-analyzer-1.0.0.jar plik1.csv plik2.csv
 ----
 
-== Uruchomienie testów jednostkowych
+=== Testy
 
-.Windows
-[source,cmd]
 ----
 gradlew.bat test
 ----
 
-.Linux/macOS
-[source,bash]
-----
-./gradlew test
-----
-
-=== Pokrycie testami
-
-Aplikacja zawiera *8 przypadków testowych* (`CategorizationServiceTest`):
-
-[arabic]
-. `shouldCategorizeMcDonaldsAsFood()` - test kategoryzacji McDonald's jako "Jedzenie"
-. `shouldCategorizeBoltAsTransport()` - test kategoryzacji Bolt jako "Transport"
-. `shouldCategorizeCinemaAsEntertainment()` - test kategoryzacji Cinema City jako "Rozrywka"
-. `shouldCategorizePGEAsBill()` - test kategoryzacji PGE jako "Rachunki"
-. `shouldCategorizePharmacyAsHealth()` - test kategoryzacji apteki jako "Zdrowie"
-. `shouldCategorizeSalaryAsIncome()` - test kategoryzacji wynagrodzenia
-. `shouldCategorizeUnknownAsOther()` - test kategoryzacji nieznanych transakcji
-. `shouldCategorizeMultipleTransactions()` - test przetwarzania wielu transakcji jednocześnie
-
 == Format pliku CSV
 
-Aplikacja obsługuje format eksportu z *PKO BP*.
+Aplikacja obsługuje format eksportu z PKO BP.
 
-=== Struktura pliku
-
-[cols="1,3", options="header"]
-|===
-|Wiersze
-|Zawartość
-
-|1-7
-|Nagłówki informacyjne banku (pomijane przez parser)
-
-|8
-|Nagłówki kolumn
-
-|9+
-|Dane transakcji
-|===
-
-=== Kolumny danych
-
-[cols="1,2,2", options="header"]
-|===
-|Nr
-|Nazwa kolumny
-|Format
-
-|1
-|Data księgowania
-|`dd-MM-yyyy` (np. `15-01-2026`)
-
-|2
-|Data operacji
-|`dd-MM-yyyy`
-
-|3
-|Rodzaj operacji
-|Tekst (np. "Płatności kartą")
-
-|4
-|Kwota
-|Liczba z przecinkiem (np. `-19.99`)
-
-|5
-|Waluta
-|Kod waluty (np. `PLN`)
-
-|6
-|Dane kontrahenta
-|Tekst
-
-|7
-|Numer rachunku kontrahenta
-|26 cyfr
-
-|8
-|Tytuł operacji
-|Tekst opisu transakcji
-
-|9
-|Saldo po operacji
-|Liczba z przecinkiem
-|===
-
-[WARNING]
-====
 Format innych banków (mBank, ING, Santander) wymaga dostosowania parsera w klasie `CsvParserService`.
-====
-
-== Przykładowy wynik działania
-
-=== Wyjście w konsoli
-
-[source,text]
-----
-========================================
-  Bank CSV Analyzer - Starting...
-========================================
-Files to process: 1
-
-Loading file: example_transactions.csv
-Loaded transactions: 45
-Categorization complete.
-
-========================================
-    QUICK SUMMARY
-========================================
-Total income: 8500.00 PLN
-Total expenses: 6200.00 PLN
-Net balance: 2300.00 PLN
-========================================
-
-Full report saved to: bank_analysis_report.txt
-
-Analysis complete!
-----
-
-=== Plik raportu (`bank_analysis_report.txt`)
-
-[source,text]
-----
-========================================
-    BANK TRANSACTION ANALYSIS REPORT
-========================================
-
-Total transactions: 45
-Date range: 2025-11-01 to 2026-01-15
-
-----------------------------------------
-EXPENSES BY CATEGORY
-----------------------------------------
-Rachunki          :    1200.00 PLN
-Jedzenie          :    1500.00 PLN
-Transport         :     800.00 PLN
-Rozrywka          :     400.00 PLN
-Zdrowie           :     300.00 PLN
-Zakupy            :     600.00 PLN
-Przelewy          :    1000.00 PLN
-Inne              :     400.00 PLN
-----------------------------------------
-TOTAL EXPENSES: 6200.00 PLN
-
-----------------------------------------
-MONTHLY BREAKDOWN
-----------------------------------------
-2025-11 | Income: 4000.00 | Expenses: 2100.00 | Balance:  1900.00 PLN
-2025-12 | Income: 4500.00 | Expenses: 2800.00 | Balance:  1700.00 PLN
-2026-01 | Income:    0.00 | Expenses: 1300.00 | Balance: -1300.00 PLN
-
-----------------------------------------
-TOP 10 LARGEST EXPENSES
-----------------------------------------
-2025-12-15 | 600.00 PLN | Zakupy | Electronics Store Online
-2025-11-20 | 500.00 PLN | Przelewy | Monthly Rent Payment
-2025-12-01 | 450.00 PLN | Rachunki | Electricity Bill December
-2026-01-10 | 400.00 PLN | Rozrywka | Cinema Multiplex Tickets
-2025-11-25 | 350.00 PLN | Jedzenie | Weekly Grocery Shopping
-2025-12-10 | 300.00 PLN | Transport | Monthly Transit Pass
-2025-11-15 | 250.00 PLN | Zdrowie | Pharmacy Medicine Purchase
-2025-12-20 | 200.00 PLN | Jedzenie | Restaurant Dinner
-2026-01-05 | 180.00 PLN | Zakupy | Clothing Store
-2025-11-30 | 150.00 PLN | Inne | Miscellaneous Expense
-...
-----
-
-== Architektura i wzorce projektowe
-
-=== Zastosowane wzorce
-
-[horizontal]
-Service Layer Pattern:: Rozdzielenie logiki biznesowej (pakiet `service`) od modeli danych (pakiet `model`)
-Single Responsibility Principle:: Każda klasa ma jeden, jasno określony cel
-Dependency Injection:: Serwisy przekazywane jako parametry, brak `new` w metodach biznesowych
-
-=== Zasady Clean Code
-
-* ✓ Nazwy klas i metod w języku angielskim
-* ✓ Metody prywatne jako pomocnicze (unikanie powtórzeń kodu)
-* ✓ Funkcje bez efektów ubocznych (pure functions)
-* ✓ Metody krótkie i jednozadaniowe (max 20-30 linii)
-
-=== Diagram klas (uproszczony)
-
-[plantuml, target=diagram-classes, format=png]
-----
-@startuml
-class BankAnalyzerApp {
-  +main(String[] args)
-}
-
-class Transaction {
-  -LocalDate bookingDate
-  -LocalDate operationDate
-  -String operationType
-  -double amount
-  -String currency
-  -String counterparty
-  -String title
-  -double balanceAfter
-  -Category category
-  +getters()
-  +setCategory(Category)
-}
-
-enum Category {
-  JEDZENIE
-  TRANSPORT
-  RACHUNKI
-  ROZRYWKA
-  ZAKUPY
-  ZDROWIE
-  WYNAGRODZENIE
-  INNE_PRZYCHODY
-  PRZELEWY
-  INNE
-}
-
-class CsvParserService {
-  +parseFile(String): List<Transaction>
-  +parseMultipleFiles(List<String>): List<Transaction>
-}
-
-class CategorizationService {
-  +categorizeTransactions(List<Transaction>)
-  -detectCategory(Transaction): Category
-  -isFood(String): boolean
-  -isTransport(String): boolean
-  -containsAny(String, String[]): boolean
-}
-
-class ReportService {
-  +generateReport(List<Transaction>, String)
-  +printSummaryToConsole(List<Transaction>)
-  -writeCategorySummary(PrintWriter, List<Transaction>)
-  -writeMonthlyBreakdown(PrintWriter, List<Transaction>)
-}
-
-BankAnalyzerApp --> CsvParserService
-BankAnalyzerApp --> CategorizationService
-BankAnalyzerApp --> ReportService
-Transaction --> Category
-CsvParserService ..> Transaction : creates
-CategorizationService ..> Transaction : uses
-CategorizationService ..> Category : uses
-ReportService ..> Transaction : uses
-@enduml
-----
-
-== Możliwe rozszerzenia
-
-[TIP]
-====
-Potencjalne kierunki rozwoju projektu:
-====
-
-. *Obsługa innych banków* - parsery dla mBank, ING, Santander
-. *Export do innych formatów* - PDF, Excel (XLSX), JSON
-. *Interfejs graficzny* - JavaFX z wykresami
-. *Wizualizacje* - wykresy słupkowe, kołowe (JFreeChart, Apache POI)
-. *Machine Learning* - automatyczna kategoryzacja z użyciem modeli ML
-. *Integracja z API* - automatyczne pobieranie transakcji z banków (PSD2)
-. *Baza danych* - persistencja danych w PostgreSQL/MySQL
-. *REST API* - serwis backendowy (Spring Boot)
-. *Dashboard webowy* - React/Angular frontend
 
 == Licencja
 
-[.text-center]
-*MIT License* - projekt edukacyjny
+MIT License - projekt edukacyjny
 
 == Kontakt
 
-[horizontal]
-Autor:: kontradam
-GitHub:: https://github.com/kontradam[@kontradam]
-Rok akademicki:: 2025/2026
-Projekt:: Laboratorium Specjalistyczne 2
-Prowadzący:: mgr Krzysztof Buszowski
-
-'''
-
-[.text-center]
-_Dokumentacja wygenerowana: {docdate}_
+* Autor: kontradam
+* GitHub: https://github.com/kontradam
+* Rok akademicki: 2025/2026
+* Projekt: Laboratorium Specjalistyczne 2
