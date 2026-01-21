@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group = 'com.bank'
@@ -17,8 +18,13 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+javafx {
+    version = '21'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
 application {
-    mainClass = 'com.bank.BankAnalyzerApp'
+    mainClass = 'com.bank.gui.BankAnalyzerGUI'
 }
 
 test {
@@ -27,7 +33,7 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.bank.BankAnalyzerApp'
+        attributes 'Main-Class': 'com.bank.gui.BankAnalyzerGUI'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
