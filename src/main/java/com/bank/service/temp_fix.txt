@@ -1,0 +1,18 @@
+    private boolean isInternalTransfer(Transaction transaction) {
+        String title = transaction.getTitle().toUpperCase();
+        String counterparty = transaction.getCounterparty().toUpperCase();
+
+        String[] selfTransferKeywords = {
+            "WLASNE", "OSZCZEDNOSCIOWE",
+            "PRZELEW WEWNETRZNY", "INTERNAL"
+        };
+
+        for (String keyword : selfTransferKeywords) {
+            if (counterparty.contains(keyword) || title.contains(keyword)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
