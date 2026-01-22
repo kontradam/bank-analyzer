@@ -13,10 +13,6 @@ public class ReportService {
 
     public void generateReport(List<Transaction> transactions, String outputPath) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(outputPath))) {
-            writer.println("========================================");
-            writer.println("    BANK TRANSACTION ANALYSIS REPORT");
-            writer.println("========================================");
-            writer.println();
 
             writer.println("Total transactions: " + transactions.size());
             writer.println("Date range: " + getDateRange(transactions));
@@ -45,9 +41,6 @@ public class ReportService {
     }
 
     private void writeCategorySummary(PrintWriter writer, List<Transaction> transactions) {
-        writer.println("----------------------------------------");
-        writer.println("EXPENSES BY CATEGORY");
-        writer.println("----------------------------------------");
 
         Map<Category, Double> categoryTotals = new HashMap<>();
 
@@ -73,9 +66,6 @@ public class ReportService {
     }
 
     private void writeMonthlyBreakdown(PrintWriter writer, List<Transaction> transactions) {
-        writer.println("----------------------------------------");
-        writer.println("MONTHLY BREAKDOWN");
-        writer.println("----------------------------------------");
 
         Map<String, Double> monthlyExpenses = new TreeMap<>();
         Map<String, Double> monthlyIncome = new TreeMap<>();
@@ -108,9 +98,6 @@ public class ReportService {
     }
 
     private void writeTopExpenses(PrintWriter writer, List<Transaction> transactions) {
-        writer.println("----------------------------------------");
-        writer.println("TOP 10 LARGEST EXPENSES");
-        writer.println("----------------------------------------");
 
         transactions.stream()
             .filter(t -> t.getAmount() < 0)
@@ -130,9 +117,6 @@ public class ReportService {
     }
 
     public void printSummaryToConsole(List<Transaction> transactions) {
-        System.out.println("\n========================================");
-        System.out.println("    QUICK SUMMARY");
-        System.out.println("========================================");
 
         double totalIncome = transactions.stream()
             .filter(t -> t.getAmount() > 0 && t.getCategory() != Category.INTERNAL_TRANSFER)
@@ -147,6 +131,5 @@ public class ReportService {
         System.out.println("Total income: " + String.format("%.2f", totalIncome) + " PLN");
         System.out.println("Total expenses: " + String.format("%.2f", totalExpenses) + " PLN");
         System.out.println("Net balance: " + String.format("%.2f", totalIncome - totalExpenses) + " PLN");
-        System.out.println("========================================\n");
     }
 }

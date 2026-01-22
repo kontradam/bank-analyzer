@@ -1,12 +1,8 @@
-.gradle/
+.gradle
 build/
-gradle-8.5/
-gradle-8.5-bin.zip
+.idea/
+*.iml
 *.class
-*.jar
-*.log
+out/
 temp_method.txt
-lista_operacji_20260121.csv
-bank_analysis_report.txt
-*.csv 
-bank_analysis_report.txt 
+gradle-8.5-bin.zip

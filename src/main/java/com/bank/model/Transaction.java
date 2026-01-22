@@ -39,7 +39,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return String.format("%%s ^| %%.2f %%s ^| %%s ^| %%s",
+        return String.format("%s | %.2f %s | %s | %s",
             operationDate, amount, currency, category, title);
     }
 }

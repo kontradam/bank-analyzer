@@ -12,7 +12,7 @@ public class BankAnalyzerApp {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("Usage: java -jar bank-analyzer.jar ^<csv_file1^> [csv_file2] ...");
+            System.out.println("Usage: java -jar bank-analyzer.jar <csv_file1> [csv_file2] ...");
             System.out.println("Example: java -jar bank-analyzer.jar transactions1.csv transactions2.csv");
             return;
         }
@@ -27,9 +27,6 @@ public class BankAnalyzerApp {
                 filePaths.add(arg);
             }
 
-            System.out.println("========================================");
-            System.out.println("  Bank CSV Analyzer - Starting...");
-            System.out.println("========================================");
             System.out.println("Files to process: " + filePaths.size());
             System.out.println();
 
@@ -45,11 +42,10 @@ public class BankAnalyzerApp {
             reportService.generateReport(transactions, reportPath);
             System.out.println("Full report saved to: " + reportPath);
 
-            System.out.println("\\nAnalysis complete!");
+            System.out.println("\nAnalysis complete");
 
         } catch (Exception e) {
             System.err.println("Error during analysis: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }

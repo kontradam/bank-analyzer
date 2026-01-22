@@ -118,4 +118,66 @@ class CategorizationServiceTest {
 
         assertEquals(Category.INNE, transaction.getCategory());
     }
+
+    @Test
+    void shouldCategorizeMultipleTransactions() {
+        List<Transaction> transactions = new ArrayList<>();
+        
+        transactions.add(new Transaction(
+            LocalDate.now(), LocalDate.now(), "Card payment",
+            -45.50, "PLN", "", "MCDONALDS", 1000.0
+        ));
+        
+        transactions.add(new Transaction(
+            LocalDate.now(), LocalDate.now(), "Card payment",
+            -25.00, "PLN", "", "BOLT TRIP", 1000.0
+        ));
+        
+        transactions.add(new Transaction(
+            LocalDate.now(), LocalDate.now(), "Card payment",
+            -89.99, "PLN", "", "CINEMA CITY", 1000.0
+        ));
+
+        service.categorizeTransactions(transactions);
+
+        assertEquals(Category.JEDZENIE, transactions.get(0).getCategory());
+        assertEquals(Category.TRANSPORT, transactions.get(1).getCategory());
+        assertEquals(Category.ROZRYWKA, transactions.get(2).getCategory());
+    }
+
+    @Test
+    void shouldHandleEmptyTransactionList() {
+        List<Transaction> transactions = new ArrayList<>();
+
+        assertDoesNotThrow(() -> service.categorizeTransactions(transactions));
+        assertEquals(0, transactions.size());
+    }
+
+    @Test
+    void shouldCategorizeAllegroAsShopping() {
+        Transaction transaction = new Transaction(
+            LocalDate.now(), LocalDate.now(), "Card payment",
+            -129.99, "PLN", "", "ALLEGRO.PL TRANSACTION", 1000.0
+        );
+
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+        service.categorizeTransactions(transactions);
+
+        assertEquals(Category.ZAKUPY, transaction.getCategory());
+    }
+
+    @Test
+    void shouldCategorizeNetiaAsBill() {
+        Transaction transaction = new Transaction(
+            LocalDate.now(), LocalDate.now(), "Outgoing transfer",
+            -60.00, "PLN", "NETIA", "Internet subscription", 1000.0
+        );
+
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+        service.categorizeTransactions(transactions);
+
+        assertEquals(Category.RACHUNKI, transaction.getCategory());
+    }
 }

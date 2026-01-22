@@ -1,9 +1,5 @@
 = Bank CSV Analyzer
 
-Aplikacja konsolowa i graficzna (JavaFX) do analizy wyciągów bankowych w formacie CSV z automatyczną kategoryzacją transakcji i generowaniem raportów statystycznych.
-
-Powstała z osobistej potrzeby do kontrolowania finansów na różnych kontach bankowych.
-
 *Projekt na zaliczenie:* Laboratorium Specjalistyczne 2 +
 *Autor:* kontradam +
 *Rok akademicki:* 2025/2026
@@ -12,11 +8,11 @@ Powstała z osobistej potrzeby do kontrolowania finansów na różnych kontach b
 
 == Problem biznesowy
 
-Ręczna analiza wyciągów bankowych jest czasochłonna i podatna na błędy. Aplikacja automatyzuje proces segregowania wydatków i generowania raportów finansowych, umożliwiając szybką analizę nawyków wydatkowych.
+Aplikacja konsolowa oraz graficzna (JavaFX) służąca do analizy wyciągów bankowych w formacie CSV pobieranych ze stron banków, z automatycznym przypisywaniem transakcji do kategorii i generowaniem raportów statystycznych.
+Projekt powstał z osobistej potrzeby kontroli finansów prowadzonych na wielu kontach bankowych. Aplikacja automatyzuje proces segregowania wydatków oraz tworzenia zestawień finansowych, umożliwiając szybką i precyzyjną analizę nawyków wydatkowych.
+Mechanizm przyporządkowywania kategorii opiera się na analizie słów kluczowych występujących w tytułach przelewów oraz nazwach odbiorców.
 
-Automatyczna kategoryzacja transakcji na podstawie słów kluczowych w tytułach płatności oraz nazw kontrahentów.
-
-Do aplikacji dołączone dwa pliki CSV z fake'owymi danymi do testowania.
+Do aplikacji dołączono dwa pliki CSV z fikcyjnymi danymi (bank_data) przeznaczonymi do testów manualnych.
 
 == Funkcjonalności
 
@@ -106,10 +102,6 @@ gradlew.bat test
 Aplikacja obsługuje format eksportu z PKO BP.
 
 Format innych banków (mBank, ING, Santander) wymaga dostosowania parsera w klasie `CsvParserService`.
-
-== Licencja
-
-MIT License - projekt edukacyjny
 
 == Kontakt
 
